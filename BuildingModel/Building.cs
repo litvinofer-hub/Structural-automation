@@ -10,6 +10,10 @@ namespace Structural_Automation.BuildingModel
         public UnitSystem UnitSystem { get; private set; } = unitSystem;
 
         private readonly Dictionary<Point3d, Point3d> _uniquePoints = [];
+        private readonly List<Level> _levels = [];
+
+        public IReadOnlyList<Level> Levels => _levels.AsReadOnly();
+
 
         /// <summary>
         /// Returns the existing Point with matching coordinates (within tolerance),

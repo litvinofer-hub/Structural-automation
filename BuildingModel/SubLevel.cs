@@ -9,7 +9,7 @@ namespace Structural_Automation.BuildingModel
         /// </summary>
         public double Offset { get; private set; } = offset;
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is SubLevel other)
             {
