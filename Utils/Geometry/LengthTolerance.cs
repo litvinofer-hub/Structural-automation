@@ -1,7 +1,7 @@
 ﻿
 namespace Structural_Automation.Utils.Geometry
 {
-    public class Settings(double tolerance = 1e-6)
+    public class LengthTolerance(double tolerance = 1e-6)
     {
         public double Tolerance { get; } = tolerance;
 

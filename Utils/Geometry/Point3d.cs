@@ -13,9 +13,9 @@ namespace Structural_Automation.Utils.Geometry
         {
             if (obj is Point3d other)
             {
-                return new Settings().AreEqual(X, other.X)
-                    && new Settings().AreEqual(Y, other.Y)
-                    && new Settings().AreEqual(Z, other.Z);
+                return new LengthTolerance().AreEqual(X, other.X)
+                    && new LengthTolerance().AreEqual(Y, other.Y)
+                    && new LengthTolerance().AreEqual(Z, other.Z);
             }
 
             return false;
@@ -23,7 +23,7 @@ namespace Structural_Automation.Utils.Geometry
 
         public override int GetHashCode()
         {
-            double roundFactor = 1.0 / new Settings().Tolerance;
+            double roundFactor = 1.0 / new LengthTolerance().Tolerance;
             int hx = (Math.Round(X * roundFactor)).GetHashCode();
             int hy = (Math.Round(Y * roundFactor)).GetHashCode();
             int hz = (Math.Round(Z * roundFactor)).GetHashCode();
