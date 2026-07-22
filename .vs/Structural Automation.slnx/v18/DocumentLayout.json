@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Ofer\\Desktop\\Autocad Tutorials\\Ben Rand\\manual code\\Structural Automation\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1793B80B-E86D-4B60-9935-17A74529A632}|Structural Automation\\Structural Automation.csproj|c:\\users\\ofer\\desktop\\autocad tutorials\\ben rand\\manual code\\structural automation\\structural automation\\buildingmodel\\sublevel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1793B80B-E86D-4B60-9935-17A74529A632}|Structural Automation\\Structural Automation.csproj|solutionrelative:structural automation\\buildingmodel\\sublevel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1793B80B-E86D-4B60-9935-17A74529A632}|Structural Automation\\Structural Automation.csproj|c:\\users\\ofer\\desktop\\autocad tutorials\\ben rand\\manual code\\structural automation\\structural automation\\utils\\geometry\\settings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1793B80B-E86D-4B60-9935-17A74529A632}|Structural Automation\\Structural Automation.csproj|solutionrelative:structural automation\\utils\\geometry\\settings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1793B80B-E86D-4B60-9935-17A74529A632}|Structural Automation\\Structural Automation.csproj|c:\\users\\ofer\\desktop\\autocad tutorials\\ben rand\\manual code\\structural automation\\structural automation\\buildingmodel\\building.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1793B80B-E86D-4B60-9935-17A74529A632}|Structural Automation\\Structural Automation.csproj|solutionrelative:structural automation\\buildingmodel\\building.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Settings.cs",
+              "DocumentMoniker": "C:\\Users\\Ofer\\Desktop\\Autocad Tutorials\\Ben Rand\\manual code\\Structural Automation\\Structural Automation\\Utils\\Geometry\\Settings.cs",
+              "RelativeDocumentMoniker": "Structural Automation\\Utils\\Geometry\\Settings.cs",
+              "ToolTip": "C:\\Users\\Ofer\\Desktop\\Autocad Tutorials\\Ben Rand\\manual code\\Structural Automation\\Structural Automation\\Utils\\Geometry\\Settings.cs",
+              "RelativeToolTip": "Structural Automation\\Utils\\Geometry\\Settings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-22T08:19:23.788Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SubLevel.cs",
+              "DocumentMoniker": "C:\\Users\\Ofer\\Desktop\\Autocad Tutorials\\Ben Rand\\manual code\\Structural Automation\\Structural Automation\\BuildingModel\\SubLevel.cs",
+              "RelativeDocumentMoniker": "Structural Automation\\BuildingModel\\SubLevel.cs",
+              "ToolTip": "C:\\Users\\Ofer\\Desktop\\Autocad Tutorials\\Ben Rand\\manual code\\Structural Automation\\Structural Automation\\BuildingModel\\SubLevel.cs",
+              "RelativeToolTip": "Structural Automation\\BuildingModel\\SubLevel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-22T08:18:43.962Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Building.cs",
+              "DocumentMoniker": "C:\\Users\\Ofer\\Desktop\\Autocad Tutorials\\Ben Rand\\manual code\\Structural Automation\\Structural Automation\\BuildingModel\\Building.cs",
+              "RelativeDocumentMoniker": "Structural Automation\\BuildingModel\\Building.cs",
+              "ToolTip": "C:\\Users\\Ofer\\Desktop\\Autocad Tutorials\\Ben Rand\\manual code\\Structural Automation\\Structural Automation\\BuildingModel\\Building.cs",
+              "RelativeToolTip": "Structural Automation\\BuildingModel\\Building.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-21T08:38:07.883Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
