@@ -11,11 +11,12 @@ namespace Structural_Automation.Utils.Geometry
 
         public override bool Equals(object? obj)
         {
+            LengthTolerance lengthTolerance = new();
             if (obj is Point3d other)
             {
-                return new LengthTolerance().AreEqual(X, other.X)
-                    && new LengthTolerance().AreEqual(Y, other.Y)
-                    && new LengthTolerance().AreEqual(Z, other.Z);
+                return lengthTolerance.AreEqual(X, other.X)
+                    && lengthTolerance.AreEqual(Y, other.Y)
+                    && lengthTolerance.AreEqual(Z, other.Z);
             }
 
             return false;
@@ -39,32 +40,14 @@ namespace Structural_Automation.Utils.Geometry
         }
 
         /// <summary>
-        /// Checks whether the list contains any two distinct points with equal coordinates.
-        /// Uses a HashSet for O(n) performance.
+        /// Returns the distance between this point and another point.
         /// </summary>
-        public static bool HasDuplicates(IEnumerable<Point3d> points)
-        {
-            var seen = new HashSet<Point3d>();
-
-            foreach (var point in points)
-            {
-                if (!seen.Add(point))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Returns the 2D distance (X, Y only) between this point and another point.
-        /// </summary>
-        public double Distance2D(Point3d other)
+        public double Distance(Point3d other)
         {
             double dx = X - other.X;
             double dy = Y - other.Y;
-            return Math.Sqrt(dx * dx + dy * dy);
+            double dz = Z - other.Z;
+            return Math.Sqrt(dx * dx + dy * dy + dz * dz);
         }
     }
 }
