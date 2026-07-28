@@ -10,9 +10,3 @@ acyclic.
 | 2 | `Vector3d` | layers 0-1 |
 | 3 | `LineSegment` | layers 0-2 |
 | 4 | `Rectangle` | layers 0-3 |
-
-`Vector3d` sits above `Point3d` because it owns every point-and-vector operation:
-the `Vector3d(Point3d, Point3d)` constructor and `Translate(Point3d)`.
-
-Not every permitted dependency is used, which is fine — the table says what a class
-*may* reach for, not what it must.
