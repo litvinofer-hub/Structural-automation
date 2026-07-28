@@ -103,7 +103,7 @@ namespace Structural_Automation.Utils.Geometry
                 return false;
             }
 
-            return new LengthTolerance().AreEqual(Normalized().Dot(other.Normalized()), 0);
+            return new AngleTolerance().IsZeroAngle(Normalized().Dot(other.Normalized()));
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Structural_Automation.Utils.Geometry
                 return false;
             }
 
-            return new LengthTolerance().AreEqual(Normalized().Cross(other.Normalized()).GetLength(), 0);
+            return new AngleTolerance().IsZeroAngle(Normalized().Cross(other.Normalized()).GetLength());
         }
 
         public Vector3d Add(Vector3d other)
@@ -146,7 +146,7 @@ namespace Structural_Automation.Utils.Geometry
 
         public Vector3d Divide(double scalar)
         {
-            if (new LengthTolerance().AreEqual(scalar, 0))
+            if (scalar == 0)
             {
                 throw new DivideByZeroException("Cannot divide a vector by zero.");
             }
