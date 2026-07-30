@@ -116,10 +116,21 @@ namespace Structural_Automation.Utils.Geometry
 
         public override int GetHashCode()
         {
+            // Sort so that the order the corners were built in cannot affect the
+            // result, while still combining them with a proper mixing step rather
+            // than adding, which collapses into a linear combination.
+            int[] cornerHashes = [.. GetCorners().Select(corner => corner.GetHashCode())];
+            Array.Sort(cornerHashes);
+
             unchecked
             {
-                // Use addition so that the order of the corners doesn't matter.
-                return GetCorners().Sum(corner => corner.GetHashCode());
+                int hash = 17;
+                foreach (int cornerHash in cornerHashes)
+                {
+                    hash = hash * 31 + cornerHash;
+                }
+
+                return hash;
             }
         }
     }
