@@ -8,7 +8,7 @@ namespace Structural_Automation.BuildingModel
     /// Z giving the height and the other parallel to the XY plane giving the length,
     /// so the wall length may sit at any angle in XY plane. Thickness spreads half to either side.
     /// </summary>
-    public class Wall : IHavePoints
+    public class Wall
     {
         public Guid Id { get; private set; }
 

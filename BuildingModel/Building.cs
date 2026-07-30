@@ -1,5 +1,4 @@
 ﻿using Structural_Automation.Utils;
-using Structural_Automation.Utils.Geometry;
 
 namespace Structural_Automation.BuildingModel
 {
@@ -9,28 +8,11 @@ namespace Structural_Automation.BuildingModel
         public string Name { get; private set; } = name;
         public UnitSystem UnitSystem { get; private set; } = unitSystem;
 
-        private readonly Dictionary<Point3d, Point3d> _uniquePoints = [];
         private readonly List<Level> _levels = [];
         private readonly List<Wall> _walls = [];
 
         public IReadOnlyList<Level> Levels => _levels.AsReadOnly();
         public IReadOnlyList<Wall> Walls => _walls.AsReadOnly();
-
-
-        /// <summary>
-        /// Returns the existing Point with matching coordinates (within tolerance),
-        /// or registers and returns the new point.
-        /// </summary>
-        public Point3d GetOrAddPoint(double x, double y, double z)
-        {
-            var candidate = new Point3d(x, y, z);
-
-            if (_uniquePoints.TryGetValue(candidate, out var existing))
-                return existing;
-
-            _uniquePoints.Add(candidate, candidate);
-            return candidate;
-        }
 
         public void AddLevel(Level level)
         {
