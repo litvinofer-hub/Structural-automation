@@ -4,14 +4,14 @@ using System.Net;
 
 namespace Structural_Automation.Utils.Geometry
 {
-    public class LineSegment(Point3d start, Point3d end)
+    public class LineSegment3d(Point3d start, Point3d end)
     {
         public Point3d Start { get; private set; } = start;
         public Point3d End { get; private set; } = end;
 
         public override bool Equals(object? obj)
         {
-            if (obj is LineSegment other)
+            if (obj is LineSegment3d other)
             {
                 bool sameDirection = Start.Equals(other.Start) && End.Equals(other.End);
                 bool reversed = Start.Equals(other.End) && End.Equals(other.Start);

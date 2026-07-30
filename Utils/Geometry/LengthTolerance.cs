@@ -44,5 +44,15 @@ namespace Structural_Automation.Utils.Geometry
         {
             return b - a > -Tolerance;
         }
+
+        /// <summary>
+        /// Returns true if a and b lie on opposite sides of zero, beyond the tolerance.
+        /// A value within the tolerance of zero counts as neither side, so it is false.
+        /// </summary>
+        public bool AreOppositeSigns(double a, double b)
+        {
+            return (IsGreaterThan(a, 0) && IsLessThan(b, 0))
+                || (IsLessThan(a, 0) && IsGreaterThan(b, 0));
+        }
     }
 }
