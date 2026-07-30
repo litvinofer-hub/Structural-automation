@@ -11,8 +11,10 @@ namespace Structural_Automation.BuildingModel
 
         private readonly Dictionary<Point3d, Point3d> _uniquePoints = [];
         private readonly List<Level> _levels = [];
+        private readonly List<Wall> _walls = [];
 
         public IReadOnlyList<Level> Levels => _levels.AsReadOnly();
+        public IReadOnlyList<Wall> Walls => _walls.AsReadOnly();
 
 
         /// <summary>
@@ -28,6 +30,26 @@ namespace Structural_Automation.BuildingModel
 
             _uniquePoints.Add(candidate, candidate);
             return candidate;
+        }
+
+        public void AddLevel(Level level)
+        {
+            _levels.Add(level);
+        }
+
+        public bool RemoveLevel(Level level)
+        {
+            return _levels.Remove(level);
+        }
+
+        public void AddWall(Wall wall)
+        {
+            _walls.Add(wall);
+        }
+
+        public bool RemoveWall(Wall wall)
+        {
+            return _walls.Remove(wall);
         }
     }
 }
