@@ -5,8 +5,7 @@ namespace Structural_Automation.Utils.Geometry
     /// A closed, planar polygon. The vertices are given, and kept, in order around the
     /// perimeter: each one joins the next, and the closing edge from the last back to
     /// the first is implied, so the first vertex is not repeated at the end. All
-    /// vertices lies on one plane, and the outline does not cross itself, which is what
-    /// makes the area and centroid meaningful.
+    /// vertices lies on one plane, and the outline does not cross itself.
     /// </summary>
     public class Polygon
     {

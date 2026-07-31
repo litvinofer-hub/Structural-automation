@@ -10,9 +10,11 @@ namespace Structural_Automation.BuildingModel
 
         private readonly List<Level> _levels = [];
         private readonly List<Wall> _walls = [];
+        private readonly List<Floor> _floors = [];
 
         public IReadOnlyList<Level> Levels => _levels.AsReadOnly();
         public IReadOnlyList<Wall> Walls => _walls.AsReadOnly();
+        public IReadOnlyList<Floor> Floors => _floors.AsReadOnly();
 
         public void AddLevel(Level level)
         {
@@ -32,6 +34,16 @@ namespace Structural_Automation.BuildingModel
         public bool RemoveWall(Wall wall)
         {
             return _walls.Remove(wall);
+        }
+
+        public void AddFloor(Floor floor)
+        {
+            _floors.Add(floor);
+        }
+
+        public bool RemoveFloor(Floor floor)
+        {
+            return _floors.Remove(floor);
         }
     }
 }
