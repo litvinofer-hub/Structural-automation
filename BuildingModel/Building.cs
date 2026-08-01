@@ -1,12 +1,12 @@
-﻿using Structural_Automation.Utils;
+﻿using Structural_Automation.Utils.SystemParams;
 
 namespace Structural_Automation.BuildingModel
 {
-    public class Building(string name, UnitSystem unitSystem)
+    public class Building(string name, Units units)
     {
         public Guid Id { get; private set; } = Guid.NewGuid();
         public string Name { get; private set; } = name;
-        public UnitSystem UnitSystem { get; private set; } = unitSystem;
+        public Units Units { get; private set; } = units;
 
         private readonly List<Level> _levels = [];
         private readonly List<Wall> _walls = [];

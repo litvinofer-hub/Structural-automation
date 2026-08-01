@@ -1,5 +1,5 @@
-﻿
-namespace Structural_Automation.Utils
+
+namespace Structural_Automation.Utils.SystemParams
 {
     public enum LengthUnit
     {
@@ -7,7 +7,7 @@ namespace Structural_Automation.Utils
         Meters
     }
 
-    public class UnitSystem(LengthUnit unit)
+    public class Units(LengthUnit unit)
     {
         public LengthUnit Unit { get; private set; } = unit;
     }
