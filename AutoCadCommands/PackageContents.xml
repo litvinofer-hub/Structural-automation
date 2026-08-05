@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ApplicationPackage
+    SchemaVersion="1.0"
+    AppVersion="1.0.0"
+    ProductCode="{7802F4F4-1C00-468A-8079-21B5213B0CAC}"
+    Name="Structural Automation"
+    Description="Structural Automation commands for AutoCAD"
+    Author="Ofer Litvin">
+  <CompanyDetails Name="Structural Automation" />
+  <Components Description="AutoCAD commands">
+    <!-- R26.0 is AutoCAD 2027. Lower SeriesMin to load in older releases too. -->
+    <RuntimeRequirements OS="Win64" Platform="AutoCAD" SeriesMin="R26.0" />
+    <ComponentEntry
+        AppName="AutoCadCommands"
+        Version="1.0.0"
+        ModuleName="./Contents/AutoCadCommands.dll"
+        AppDescription="Structural Automation commands"
+        LoadOnAutoCADStartup="True" />
+  </Components>
+</ApplicationPackage>

@@ -9,8 +9,20 @@
     <PlatformTarget>x64</PlatformTarget>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
-    <!-- AutoCAD supplies these at run time, so the build must not copy them out. -->
-    <AutoCadDir Condition="'$(AutoCadDir)' == ''">C:\Program Files\Autodesk\AutoCAD 2027\</AutoCadDir>
+  </PropertyGroup>
+
+  <!--
+    AutoCadDir and SaBundleDir come from Directory.Build.props at the root.
+
+    A dll cannot be started, so F5 would fail on the project output. Start AutoCAD
+    instead and attach to it - the bundle is already deployed by then, so breakpoints
+    hit as soon as a command runs.
+  -->
+  <PropertyGroup>
+    <RunCommand>$(AutoCadDir)acad.exe</RunCommand>
+    <RunWorkingDirectory>$(AutoCadDir)</RunWorkingDirectory>
+    <!-- AssemblyName, not TargetFileName: the latter is only set by targets imported below. -->
+    <SaPluginDll>$(SaBundleDir)Contents\$(AssemblyName).dll</SaPluginDll>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,5 +39,28 @@
       <Private>false</Private>
     </Reference>
   </ItemGroup>
+
+  <!--
+    Deploys the plugin straight into the bundle AutoCAD reads on startup, so a build
+    is all it takes. AutoCAD holds the dll open while it runs, so the copy fails until
+    it is closed - hence the warning rather than a silently stale dll.
+  -->
+  <Target Name="DeployBundle" AfterTargets="Build">
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\PackageContents.xml"
+          DestinationFolder="$(SaBundleDir)"
+          ContinueOnError="true" />
+    <Copy SourceFiles="$(TargetPath)"
+          DestinationFiles="$(SaPluginDll)"
+          ContinueOnError="true">
+      <Output TaskParameter="CopiedFiles" ItemName="SaDeployed" />
+    </Copy>
+    <!-- The pdb is what lets breakpoints bind, so it travels with the dll. -->
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb"
+          DestinationFolder="$(SaBundleDir)Contents\"
+          ContinueOnError="true" />
+    <Message Condition="'@(SaDeployed)' != ''" Importance="high" Text="Deployed $(SaPluginDll)" />
+    <Warning Condition="'@(SaDeployed)' == ''"
+             Text="Could not deploy to $(SaBundleDir) - AutoCAD is probably running and holding the dll. Close it and build again." />
+  </Target>
 
 </Project>

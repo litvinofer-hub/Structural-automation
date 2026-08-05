@@ -1,0 +1,23 @@
+<Project>
+
+  <PropertyGroup>
+    <!--
+      The machine paths, in one place for every project. Override either one without
+      editing this file:  dotnet build -p:SaBundleDir=D:\Somewhere\
+    -->
+
+    <!-- Where AutoCAD is installed, holding the managed assemblies we compile against. -->
+    <AutoCadDir Condition="'$(AutoCadDir)' == ''">C:\Program Files\Autodesk\AutoCAD 2027\</AutoCadDir>
+
+    <!--
+      Where the plugin is deployed. AutoCAD loads every bundle under ApplicationPlugins
+      on startup. APPDATA is hidden in Explorer, so paste the path in to reach it - the
+      dll itself lands in:
+
+        %APPDATA%\Autodesk\ApplicationPlugins\StructuralAutomation.bundle\Contents\AutoCadCommands.dll
+        C:\Users\Ofer\AppData\Roaming\Autodesk\ApplicationPlugins\StructuralAutomation.bundle\Contents\AutoCadCommands.dll
+    -->
+    <SaBundleDir Condition="'$(SaBundleDir)' == ''">$(APPDATA)\Autodesk\ApplicationPlugins\StructuralAutomation.bundle\</SaBundleDir>
+  </PropertyGroup>
+
+</Project>
