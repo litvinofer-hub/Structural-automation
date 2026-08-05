@@ -5,15 +5,34 @@
     <RootNamespace>Structural_Automation.AutoCadCommands</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <!-- AutoCAD is 64-bit, and loads the plugin into its own process. -->
-    <PlatformTarget>x64</PlatformTarget>
+    <!-- AutoCAD's own assemblies are built on these, so without them the build warns. -->
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
   <!--
-    AutoCadDir and SaBundleDir come from Directory.Build.props at the root.
+    The machine paths. Override either without editing this file:
+    dotnet build -p:SaBundleDir=D:\Somewhere\
+  -->
+  <PropertyGroup>
+    <!-- Where AutoCAD is installed, holding the managed assemblies we compile against. -->
+    <AutoCadDir Condition="'$(AutoCadDir)' == ''">C:\Program Files\Autodesk\AutoCAD 2027\</AutoCadDir>
 
+    <!--
+      Where the plugin is deployed. AutoCAD loads every bundle under ApplicationPlugins
+      on startup. APPDATA is hidden in Explorer, so paste the path in to reach it - the
+      dll itself lands in:
+
+        %APPDATA%\Autodesk\ApplicationPlugins\StructuralAutomation.bundle\Contents\AutoCadCommands.dll
+        C:\Users\Ofer\AppData\Roaming\Autodesk\ApplicationPlugins\StructuralAutomation.bundle\Contents\AutoCadCommands.dll
+    -->
+    <SaBundleDir Condition="'$(SaBundleDir)' == ''">$(APPDATA)\Autodesk\ApplicationPlugins\StructuralAutomation.bundle\</SaBundleDir>
+
+    <!-- AssemblyName, not TargetFileName: the latter is only set by targets imported below. -->
+    <SaPluginDll>$(SaBundleDir)Contents\$(AssemblyName).dll</SaPluginDll>
+  </PropertyGroup>
+
+  <!--
     A dll cannot be started, so F5 would fail on the project output. Start AutoCAD
     instead and attach to it - the bundle is already deployed by then, so breakpoints
     hit as soon as a command runs.
@@ -21,8 +40,6 @@
   <PropertyGroup>
     <RunCommand>$(AutoCadDir)acad.exe</RunCommand>
     <RunWorkingDirectory>$(AutoCadDir)</RunWorkingDirectory>
-    <!-- AssemblyName, not TargetFileName: the latter is only set by targets imported below. -->
-    <SaPluginDll>$(SaBundleDir)Contents\$(AssemblyName).dll</SaPluginDll>
   </PropertyGroup>
 
   <ItemGroup>
@@ -46,7 +63,7 @@
     it is closed - hence the warning rather than a silently stale dll.
   -->
   <Target Name="DeployBundle" AfterTargets="Build">
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\PackageContents.xml"
+    <Copy SourceFiles="PackageContents.xml"
           DestinationFolder="$(SaBundleDir)"
           ContinueOnError="true" />
     <Copy SourceFiles="$(TargetPath)"
