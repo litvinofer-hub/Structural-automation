@@ -1,70 +1,58 @@
 
 using Autodesk.AutoCAD.ApplicationServices;
-using Autodesk.AutoCAD.Colors;
-using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Runtime;
 // Aliased, since WinForms brings in an Application of its own.
 using AcadApplication = Autodesk.AutoCAD.ApplicationServices.Application;
-// Aliased, since WinForms brings in System.Drawing.Color.
-using AcadColor = Autodesk.AutoCAD.Colors.Color;
 
 [assembly: CommandClass(typeof(Structural_Automation.AutoCadCommands.Commands))]
 
 namespace Structural_Automation.AutoCadCommands
 {
+    /// <summary>
+    /// Every command AutoCAD offers, and nothing else. Each one is a thin entry point:
+    /// the drawing work belongs to the class it calls, and all that happens here is
+    /// naming the command and saying what it did.
+    /// </summary>
     public class Commands
     {
-        /// <summary>
-        /// Creates every <see cref="SaLayer"/> missing from the drawing. A layer already
-        /// there is kept untouched and warned about, since its colour may not be ours.
-        /// </summary>
+        /// <summary>The palette every command draws in. AutoCAD holds one per document.</summary>
+        private readonly SaLayerColors _colors = new();
+
         [CommandMethod("SA_CREATELAYERS")]
         public void CreateLayers()
         {
             Document document = AcadApplication.DocumentManager.MdiActiveDocument;
-            Database database = document.Database;
+            SaLayerTable layers = new(document.Database, _colors);
+
+            LayerReport report = layers.Create();
             Editor editor = document.Editor;
 
-            SaLayerColors colors = new();
-            SaLayer[] layers = Enum.GetValues<SaLayer>();
-            List<string> kept = [];
-            int created = 0;
+            editor.WriteMessage($"\n{report.Applied.Count} layer(s) created.");
 
-            using (Transaction transaction = database.TransactionManager.StartTransaction())
+            if (report.Skipped.Count > 0)
             {
-                LayerTable layerTable = (LayerTable)transaction.GetObject(database.LayerTableId, OpenMode.ForRead);
-
-                foreach (SaLayer layer in layers)
-                {
-                    string name = layer.ToString();
-                    if (layerTable.Has(name))
-                    {
-                        kept.Add(name);
-                        continue;
-                    }
-
-                    LayerTableRecord record = new()
-                    {
-                        Name = name,
-                        Color = AcadColor.FromColorIndex(ColorMethod.ByAci, colors.ColorIndexOf(layer))
-                    };
-
-                    layerTable.UpgradeOpen();
-                    layerTable.Add(record);
-                    transaction.AddNewlyCreatedDBObject(record, true);
-                    created++;
-                }
-
-                transaction.Commit();
+                editor.WriteMessage($"\nWarning: {report.Skipped.Count} layer(s) were already in the drawing and "
+                    + $"were left as they are, so their colour may not be the one we expect: "
+                    + $"{string.Join(", ", report.Skipped)}");
             }
+        }
 
-            editor.WriteMessage($"\n{created} layer(s) created.");
+        [CommandMethod("SA_DELETELAYERS")]
+        public void DeleteLayers()
+        {
+            Document document = AcadApplication.DocumentManager.MdiActiveDocument;
+            SaLayerTable layers = new(document.Database, _colors);
 
-            if (kept.Count > 0)
+            LayerReport report = layers.Delete();
+            Editor editor = document.Editor;
+
+            editor.WriteMessage($"\n{report.Applied.Count} layer(s) deleted.");
+
+            if (report.Skipped.Count > 0)
             {
-                editor.WriteMessage($"\nWarning: {kept.Count} layer(s) were already in the drawing and were left as they are, "
-                    + $"so their colour may not be the one we expect: {string.Join(", ", kept)}");
+                editor.WriteMessage($"\nWarning: {report.Skipped.Count} layer(s) are still in use and were kept - "
+                    + $"move or erase what is drawn on them first: {string.Join(", ", report.Skipped)}");
             }
         }
     }
