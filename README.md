@@ -1,19 +1,19 @@
 # Structural Automation
 
-## Dependency layers
+## Dependency tiers
 
-A project may reference lower layers only — never its own or higher. Keeps the graph
+A project may reference lower tiers only — never its own or higher. Keeps the graph
 acyclic.
 
-| Layer | Project | May depend on | References |
+| Tier | Project | May depend on | References |
 |---|---|---|---|
 | 0 | `Utils` | nothing | — |
 | 0 | `AutoCadCommands` | nothing | — |
-| 1 | `BuildingModel` | layer 0 | `Utils` |
+| 1 | `BuildingModel` | tier 0 | `Utils` |
 
-Each project has its own layering — see [Utils/LAYERS.md](Utils/LAYERS.md),
-[BuildingModel/LAYERS.md](BuildingModel/LAYERS.md) and
-[AutoCadCommands/LAYERS.md](AutoCadCommands/LAYERS.md).
+Each project has its own tiers — see [Utils/TIERS.md](Utils/TIERS.md),
+[BuildingModel/TIERS.md](BuildingModel/TIERS.md) and
+[AutoCadCommands/TIERS.md](AutoCadCommands/TIERS.md).
 
 The references are the `ProjectReference` entries in each `.csproj`.
 
