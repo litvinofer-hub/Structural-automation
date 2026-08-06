@@ -14,7 +14,6 @@ namespace Structural_Automation.AutoCadCommands
     /// </summary>
     public class SaLayerTable(Database database, SaLayerColors colors)
     {
-
         /// <summary>
         /// Creates the layers the drawing lacks. One already there is left untouched and
         /// reported as skipped, since its colour may not be ours.
@@ -29,27 +28,52 @@ namespace Structural_Automation.AutoCadCommands
 
             foreach (SaLayer layer in Enum.GetValues<SaLayer>())
             {
-                string name = layer.ToString();
-                if (layerTable.Has(name))
+                if (layerTable.Has(layer.ToString()))
                 {
-                    kept.Add(name);
+                    kept.Add(layer.ToString());
                     continue;
                 }
 
-                LayerTableRecord record = new()
-                {
-                    Name = name,
-                    Color = AcadColor.FromColorIndex(ColorMethod.ByAci, colors.ColorIndexOf(layer))
-                };
-
-                layerTable.UpgradeOpen();
-                layerTable.Add(record);
-                transaction.AddNewlyCreatedDBObject(record, true);
-                created.Add(name);
+                Add(transaction, layerTable, layer);
+                created.Add(layer.ToString());
             }
 
             transaction.Commit();
             return new LayerReport(created, kept);
+        }
+
+        /// <summary>
+        /// Makes sure one layer is there, for a command that is about to draw on it.
+        /// True when it had to be created.
+        /// </summary>
+        public bool Ensure(SaLayer layer)
+        {
+            using Transaction transaction = database.TransactionManager.StartTransaction();
+            LayerTable layerTable = (LayerTable)transaction.GetObject(database.LayerTableId, OpenMode.ForRead);
+
+            if (layerTable.Has(layer.ToString()))
+            {
+                transaction.Commit();
+                return false;
+            }
+
+            Add(transaction, layerTable, layer);
+            transaction.Commit();
+            return true;
+        }
+
+        /// <summary>Adds one layer in our palette to a table already open for read.</summary>
+        private void Add(Transaction transaction, LayerTable layerTable, SaLayer layer)
+        {
+            LayerTableRecord record = new()
+            {
+                Name = layer.ToString(),
+                Color = AcadColor.FromColorIndex(ColorMethod.ByAci, colors.ColorIndexOf(layer))
+            };
+
+            layerTable.UpgradeOpen();
+            layerTable.Add(record);
+            transaction.AddNewlyCreatedDBObject(record, true);
         }
 
         /// <summary>
@@ -75,10 +99,7 @@ namespace Structural_Automation.AutoCadCommands
                 }
             }
 
-            // Purge narrows the collection it is given to what nothing refers to, so asking
-            // it first is what keeps the erase below from throwing and losing the lot.
-            ObjectIdCollection erasable = new([.. ours.Cast<ObjectId>()]);
-            database.Purge(erasable);
+            ObjectIdCollection erasable = Purgeable(ours);
 
             foreach (ObjectId id in ours)
             {
@@ -98,6 +119,19 @@ namespace Structural_Automation.AutoCadCommands
 
             transaction.Commit();
             return new LayerReport(deleted, inUse);
+        }
+
+        /// <summary>
+        /// Which of the given ids nothing refers to. Purge narrows the collection it is
+        /// handed, and asking it first is what keeps an erase from throwing and losing
+        /// the whole transaction.
+        /// </summary>
+        private ObjectIdCollection Purgeable(ObjectIdCollection ids)
+        {
+            ObjectIdCollection purgeable = new([.. ids.Cast<ObjectId>()]);
+            database.Purge(purgeable);
+
+            return purgeable;
         }
     }
 }
