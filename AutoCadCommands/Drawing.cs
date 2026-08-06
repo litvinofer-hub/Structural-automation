@@ -27,6 +27,17 @@ namespace Structural_Automation.AutoCadCommands
             return (BlockTableRecord)transaction.GetObject(blockTable[BlockTableRecord.ModelSpace], mode);
         }
 
+        public List<ObjectId> ModelSpaceIds(Transaction transaction)
+        {
+            List<ObjectId> ids = [];
+            foreach (ObjectId id in ModelSpace(transaction, OpenMode.ForRead))
+            {
+                ids.Add(id);
+            }
+
+            return ids;
+        }
+
         /// <summary>Adds an entity to model space on the given layer.</summary>
         public ObjectId Add(Transaction transaction, Entity entity, SaLayer layer)
         {

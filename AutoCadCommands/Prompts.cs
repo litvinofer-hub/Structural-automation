@@ -11,16 +11,36 @@ namespace Structural_Automation.AutoCadCommands
     /// </summary>
     public class Prompts(Editor editor)
     {
-        /// <summary>Asks for a point, allowing the given keywords to be typed instead.</summary>
-        public PromptPointResult AskPointOrKeyword(string message, params string[] keywords)
+        /// <summary>
+        /// Asks the user to choose one of the keywords. AutoCAD renders the list itself,
+        /// so the message carries no brackets of its own.
+        /// </summary>
+        public string? AskKeyword(string message, string[] keywords, string chosenByDefault)
         {
-            PromptPointOptions options = new(message);
+            PromptKeywordOptions options = new(message);
             foreach (string keyword in keywords)
             {
                 options.Keywords.Add(keyword);
             }
 
-            return editor.GetPoint(options);
+            options.Keywords.Default = chosenByDefault;
+            options.AllowNone = true;
+
+            PromptResult result = editor.GetKeywords(options);
+
+            return result.Status == PromptStatus.OK ? result.StringResult : null;
+        }
+
+        /// <summary>
+        /// Asks for a point. With <paramref name="allowFinish"/> the user can press Enter
+        /// to say they are done, which reads the same as cancelling: null, stop asking.
+        /// </summary>
+        public Point3d? AskPoint(string message, bool allowFinish)
+        {
+            PromptPointOptions options = new(message) { AllowNone = allowFinish };
+            PromptPointResult result = editor.GetPoint(options);
+
+            return result.Status == PromptStatus.OK ? result.Value : null;
         }
 
         /// <summary>Asks for the corner opposite <paramref name="from"/>, rubber banded.</summary>
@@ -40,12 +60,12 @@ namespace Structural_Automation.AutoCadCommands
             return result.Status == PromptStatus.OK ? result.StringResult : null;
         }
 
-        /// <summary>Asks the user to pick a polyline, and only accepts one on the layer.</summary>
-        public ObjectId? AskPolylineOn(string message, SaLayer layer)
+        /// <summary>Asks the user to pick an entity, and only accepts one on the layer.</summary>
+        public ObjectId? AskEntityOn(string message, SaLayer layer, Type allowed)
         {
             PromptEntityOptions options = new(message);
-            options.SetRejectMessage($"\nMust be a rectangle on {layer}.");
-            options.AddAllowedClass(typeof(Polyline), exactMatch: false);
+            options.SetRejectMessage($"\nMust be a {allowed.Name} on {layer}.");
+            options.AddAllowedClass(allowed, exactMatch: false);
 
             PromptEntityResult result = editor.GetEntity(options);
             if (result.Status != PromptStatus.OK)
@@ -60,7 +80,7 @@ namespace Structural_Automation.AutoCadCommands
 
             if (!ours)
             {
-                editor.WriteMessage($"\nThat rectangle is not on {layer}.");
+                editor.WriteMessage($"\nThat is not on {layer}.");
                 return null;
             }
 

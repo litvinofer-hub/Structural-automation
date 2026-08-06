@@ -84,6 +84,28 @@ namespace Structural_Automation.AutoCadCommands
             return inside;
         }
 
+        public List<ObjectId> OnLayer(SaLayer layer, IEnumerable<ObjectId> ids)
+        {
+            List<ObjectId> found = [];
+
+            foreach (ObjectId id in ids)
+            {
+                Entity entity = (Entity)transaction.GetObject(id, OpenMode.ForRead);
+                if (entity.Layer == layer.ToString())
+                {
+                    found.Add(id);
+                }
+            }
+
+            return found;
+        }
+
+        public void Erase(ObjectId id)
+        {
+            Entity entity = (Entity)transaction.GetObject(id, OpenMode.ForWrite);
+            entity.Erase();
+        }
+
         public void MoveBy(ObjectId id, Vector3d offset)
         {
             Entity entity = (Entity)transaction.GetObject(id, OpenMode.ForWrite);

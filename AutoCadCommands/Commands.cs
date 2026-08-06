@@ -21,6 +21,9 @@ namespace Structural_Automation.AutoCadCommands
         /// <summary>The palette every command draws in. AutoCAD holds one per document.</summary>
         private readonly SaLayerColors _colors = new();
 
+        /// <summary>The layers holding our own marks rather than the building.</summary>
+        private readonly SaAnnotations _annotations = new();
+
         [CommandMethod("SA_CREATELAYERS")]
         public void CreateLayers()
         {
@@ -57,7 +60,7 @@ namespace Structural_Automation.AutoCadCommands
         {
             Drawing drawing = new(AcadApplication.DocumentManager.MdiActiveDocument);
             Prompts prompts = new(drawing.Editor);
-            FloorPlanBbox plan = new(drawing, Layers(drawing));
+            FloorPlanBbox plan = new(drawing, Layers(drawing), _annotations);
 
             ObjectId? box = AskForBox();
             if (box is null)
@@ -76,18 +79,25 @@ namespace Structural_Automation.AutoCadCommands
             plan.Label(box.Value, name);
             drawing.Editor.WriteMessage($"\nFloor plan '{name}' boxed around {elements} element(s).");
 
-            // Draws a box from two corners, or takes one the user already drew.
+            // The choice comes first, so picking a point only ever means drawing a new box.
             ObjectId? AskForBox()
             {
-                PromptPointResult corner = prompts.AskPointOrKeyword(
-                    "\nSpecify first corner of the floor plan box or [Select an existing one]", "Select");
+                string? choice = prompts.AskKeyword(
+                    "\nDraw a new floor plan box or select an existing one", ["Draw", "Select"], "Draw");
 
-                if (corner.Status == PromptStatus.Keyword)
+                if (choice is null)
                 {
-                    return prompts.AskPolylineOn("\nSelect the bounding box", SaLayer.SA_BBOX);
+                    return null;
                 }
 
-                if (corner.Status != PromptStatus.OK)
+                if (choice == "Select")
+                {
+                    return prompts.AskEntityOn(
+                        "\nSelect the bounding box", SaLayer.SA_FLOOR_PLAN_BBOX, typeof(Polyline));
+                }
+
+                Point3d? corner = prompts.AskPoint("\nSpecify first corner", allowFinish: false);
+                if (corner is null)
                 {
                     return null;
                 }
@@ -95,6 +105,142 @@ namespace Structural_Automation.AutoCadCommands
                 Point3d? opposite = prompts.AskCorner("\nSpecify opposite corner", corner.Value);
 
                 return opposite is null ? null : plan.Draw(corner.Value, opposite.Value);
+            }
+        }
+
+        /// <summary>
+        /// Asks for one origin circle per floor plan, then insists on exactly one in each:
+        /// the plans left empty are asked for again by name, and a plan holding several is
+        /// settled by the user saying which to keep.
+        /// </summary>
+        [CommandMethod("SA_ORIGIN")]
+        public void Origin()
+        {
+            Drawing drawing = new(AcadApplication.DocumentManager.MdiActiveDocument);
+            Editor editor = drawing.Editor;
+            Prompts prompts = new(editor);
+            FloorPlans plans = new(drawing);
+            FloorPlanOrigin origins = new(drawing, Layers(drawing), plans);
+
+            List<FloorPlan> all = plans.All();
+            if (all.Count == 0)
+            {
+                editor.WriteMessage("\nNo floor plans found. Run SA_FLOORPLANBBOX first.");
+                return;
+            }
+
+            if (!DrawMany())
+            {
+                return;
+            }
+
+            while (true)
+            {
+                List<FloorPlan> empty = [];
+                List<FloorPlan> crowded = [];
+
+                foreach (FloorPlan plan in all)
+                {
+                    int count = origins.In(plan).Count;
+                    if (count == 0)
+                    {
+                        empty.Add(plan);
+                    }
+                    else if (count > 1)
+                    {
+                        crowded.Add(plan);
+                    }
+                }
+
+                if (empty.Count == 0 && crowded.Count == 0)
+                {
+                    break;
+                }
+
+                if (!Thin(crowded) || !Fill(empty))
+                {
+                    return;
+                }
+            }
+
+            editor.WriteMessage($"\n{all.Count} floor plan(s), one origin each.");
+
+            // Free drawing: a circle wherever the user picks, until they say they are done.
+            bool DrawMany()
+            {
+                while (true)
+                {
+                    Point3d? centre = prompts.AskPoint(
+                        "\nDraw an origin in each floor plan, or press Enter when finished", allowFinish: true);
+
+                    if (centre is null)
+                    {
+                        return true;
+                    }
+
+                    FloorPlan? plan = plans.Containing(centre.Value);
+                    if (plan is null)
+                    {
+                        editor.WriteMessage("\nThat point is not inside any floor plan.");
+                        continue;
+                    }
+
+                    origins.Place(centre.Value, plan);
+                }
+            }
+
+            // Drawing another circle cannot fix a plan that holds too many, so the user says
+            // which one is the origin and the rest go.
+            bool Thin(List<FloorPlan> crowded)
+            {
+                foreach (FloorPlan plan in crowded)
+                {
+                    List<ObjectId> found = origins.In(plan);
+                    editor.WriteMessage($"\nWarning: '{plan.Name}' has {found.Count} origins, it must have exactly one.");
+
+                    ObjectId? keep = prompts.AskEntityOn(
+                        $"\nPick the origin to keep in '{plan.Name}'", SaLayer.SA_FLOOR_PLAN_ORIGIN, typeof(Circle));
+
+                    if (keep is null)
+                    {
+                        return false;
+                    }
+
+                    if (!found.Contains(keep.Value))
+                    {
+                        editor.WriteMessage($"\nThat origin is not in '{plan.Name}'.");
+                        return false;
+                    }
+
+                    editor.WriteMessage($"\n{origins.KeepOnly(keep.Value, found)} origin(s) erased.");
+                }
+
+                return true;
+            }
+
+            bool Fill(List<FloorPlan> empty)
+            {
+                foreach (FloorPlan plan in empty)
+                {
+                    editor.WriteMessage($"\nWarning: '{plan.Name}' has no origin.");
+
+                    Point3d? centre = prompts.AskPoint($"\nDraw the origin in '{plan.Name}'", allowFinish: false);
+                    if (centre is null)
+                    {
+                        return false;
+                    }
+
+                    FloorPlan? holder = plans.Containing(centre.Value);
+                    if (holder is null || holder.Box != plan.Box)
+                    {
+                        editor.WriteMessage($"\nThat point is not inside '{plan.Name}'.");
+                        continue;
+                    }
+
+                    origins.Place(centre.Value, plan);
+                }
+
+                return true;
             }
         }
 

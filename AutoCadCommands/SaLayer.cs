@@ -19,8 +19,9 @@ namespace Structural_Automation.AutoCadCommands
         SA_COLUMN_TEXT,
         SA_ROOM,
         SA_ROOM_TEXT,
-        SA_BBOX,
-        SA_BBOX_TEXT
+        SA_FLOOR_PLAN_BBOX,
+        SA_FLOOR_PLAN_BBOX_TEXT,
+        SA_FLOOR_PLAN_ORIGIN
     }
 
     /// <summary>
@@ -50,7 +51,9 @@ namespace Structural_Automation.AutoCadCommands
                 SaLayer.SA_BEAM or SaLayer.SA_BEAM_TEXT => _red,
                 SaLayer.SA_COLUMN or SaLayer.SA_COLUMN_TEXT => _brown,
                 SaLayer.SA_ROOM or SaLayer.SA_ROOM_TEXT => _grey,
-                SaLayer.SA_BBOX or SaLayer.SA_BBOX_TEXT => _green,
+                SaLayer.SA_FLOOR_PLAN_BBOX
+                    or SaLayer.SA_FLOOR_PLAN_BBOX_TEXT
+                    or SaLayer.SA_FLOOR_PLAN_ORIGIN => _green,
                 _ => throw new ArgumentOutOfRangeException(nameof(layer))
             };
         }
