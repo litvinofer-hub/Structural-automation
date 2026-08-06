@@ -1,8 +1,10 @@
 
+using Structural_Automation.AutoCadCommands.Acad;
+using Structural_Automation.AutoCadCommands.Layers;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 
-namespace Structural_Automation.AutoCadCommands
+namespace Structural_Automation.AutoCadCommands.Plans
 {
     /// <summary>
     /// The circle marking where (0,0) is for a floor plan. Exactly one belongs in each,

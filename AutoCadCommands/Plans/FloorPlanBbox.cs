@@ -1,8 +1,10 @@
 
+using Structural_Automation.AutoCadCommands.Acad;
+using Structural_Automation.AutoCadCommands.Layers;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 
-namespace Structural_Automation.AutoCadCommands
+namespace Structural_Automation.AutoCadCommands.Plans
 {
     /// <summary>
     /// A floor plan's bounding box: the rectangle around it, and the name written at its

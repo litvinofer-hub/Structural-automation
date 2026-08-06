@@ -1,5 +1,5 @@
 
-namespace Structural_Automation.AutoCadCommands
+namespace Structural_Automation.AutoCadCommands.Layers
 {
     /// <summary>
     /// The layers we draw on about a drawing rather than about the building. A command

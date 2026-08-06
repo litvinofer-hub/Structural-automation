@@ -1,9 +1,10 @@
 
+using Structural_Automation.AutoCadCommands.Layers;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 
-namespace Structural_Automation.AutoCadCommands
+namespace Structural_Automation.AutoCadCommands.Acad
 {
     /// <summary>
     /// What a command asks the user for. Null means the user cancelled, so a command

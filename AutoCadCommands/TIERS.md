@@ -3,14 +3,22 @@
 A class may reference lower tiers only — never its own or higher. Keeps the graph
 acyclic. Tiers are ours; layers are AutoCAD's, and the two mean different things here.
 
-| Tier | Class | May depend on |
-|---|---|---|
-| 0 | `SaLayer`, `SaLayerColors`, `SaAnnotations`, `LayerReport`, `FloorPlan` | nothing |
-| 1 | `Drawing`, `Prompts`, `Entities`, `SaLayerTable` | tier 0 |
-| 2 | `FloorPlans` | tiers 0-1 |
-| 3 | `FloorPlanBbox`, `FloorPlanOrigin` | tiers 0-2 |
-| 4 | `Commands` | tiers 0-3 |
+Folders group by role and the namespaces follow them, so a tier is readable from the
+path a file sits at.
 
-`Commands` holds every command AutoCAD offers and no drawing work. Tier 3 holds one
-class per operation, tier 2 what the operations agree on, tier 1 the plumbing they all
-need, so a new command is an entry point at the top and a method or two below it.
+| Tier | Folder | Class | May depend on |
+|---|---|---|---|
+| 0 | `Layers/` | `SaLayer`, `SaLayerColors`, `SaAnnotations`, `LayerReport` | nothing |
+| 0 | `Plans/` | `FloorPlan` | nothing |
+| 1 | `Acad/` | `Drawing`, `Prompts`, `Entities`, `Messages` | tier 0 |
+| 1 | `Layers/` | `SaLayerTable` | tier 0 |
+| 2 | `Plans/` | `FloorPlans` | tiers 0-1 |
+| 3 | `Plans/` | `FloorPlanBbox`, `FloorPlanOrigin` | tiers 0-2 |
+| 4 | `Commands/` | `Session` | tiers 0-2 |
+| 5 | `Commands/` | one class per command | tiers 0-4 |
+| 6 | root | `SaCommands` | tier 5 |
+
+`SaCommands` declares the commands AutoCAD offers and nothing else. Each hands off to
+a class in `Commands/`, which asks the user and reports, leaning on `Plans/` for the
+drawing work and `Acad/` for the plumbing under it. So a new command is a declaration
+at the top and a class below it.

@@ -1,8 +1,9 @@
 
+using Structural_Automation.AutoCadCommands.Layers;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 
-namespace Structural_Automation.AutoCadCommands
+namespace Structural_Automation.AutoCadCommands.Acad
 {
     /// <summary>
     /// Reads and moves entities through one transaction. Extents are null rather than

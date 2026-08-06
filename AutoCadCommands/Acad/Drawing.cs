@@ -1,9 +1,10 @@
 
+using Structural_Automation.AutoCadCommands.Layers;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 
-namespace Structural_Automation.AutoCadCommands
+namespace Structural_Automation.AutoCadCommands.Acad
 {
     /// <summary>
     /// The drawing a command works on. Every command needs a transaction, model space
