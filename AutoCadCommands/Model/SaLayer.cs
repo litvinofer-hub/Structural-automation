@@ -1,5 +1,5 @@
 
-namespace Structural_Automation.AutoCadCommands.Layers
+namespace Structural_Automation.AutoCadCommands.Model
 {
     /// <summary>
     /// The layers the plugin draws on. Each name is the AutoCAD layer name verbatim,

@@ -1,7 +1,7 @@
 
 using Autodesk.AutoCAD.Runtime;
 using Structural_Automation.AutoCadCommands.Commands;
-using Structural_Automation.AutoCadCommands.Layers;
+using Structural_Automation.AutoCadCommands.Model;
 // Aliased, since WinForms brings in an Application of its own.
 using AcadApplication = Autodesk.AutoCAD.ApplicationServices.Application;
 

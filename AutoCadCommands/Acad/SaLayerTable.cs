@@ -1,10 +1,11 @@
 
+using Structural_Automation.AutoCadCommands.Model;
 using Autodesk.AutoCAD.Colors;
 using Autodesk.AutoCAD.DatabaseServices;
 // Aliased, since WinForms brings in System.Drawing.Color.
 using AcadColor = Autodesk.AutoCAD.Colors.Color;
 
-namespace Structural_Automation.AutoCadCommands.Layers
+namespace Structural_Automation.AutoCadCommands.Acad
 {
     /// <summary>
     /// A drawing's layer table, seen through the layers we own. Every command that

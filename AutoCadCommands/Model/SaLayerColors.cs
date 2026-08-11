@@ -1,5 +1,5 @@
 
-namespace Structural_Automation.AutoCadCommands.Layers
+namespace Structural_Automation.AutoCadCommands.Model
 {
     /// <summary>
     /// The palette the layers are drawn in, as AutoCAD Color Indices. Swap an instance

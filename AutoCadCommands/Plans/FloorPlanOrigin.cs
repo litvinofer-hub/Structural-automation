@@ -1,6 +1,6 @@
 
 using Structural_Automation.AutoCadCommands.Acad;
-using Structural_Automation.AutoCadCommands.Layers;
+using Structural_Automation.AutoCadCommands.Model;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 

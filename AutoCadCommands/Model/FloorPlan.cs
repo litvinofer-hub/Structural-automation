@@ -2,7 +2,7 @@
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 
-namespace Structural_Automation.AutoCadCommands.Plans
+namespace Structural_Automation.AutoCadCommands.Model
 {
     /// <summary>
     /// One floor plan: the rectangle around it, what it is called, and the ground it

@@ -1,6 +1,6 @@
 
 using Autodesk.AutoCAD.EditorInput;
-using Structural_Automation.AutoCadCommands.Layers;
+using Structural_Automation.AutoCadCommands.Model;
 
 namespace Structural_Automation.AutoCadCommands.Acad
 {

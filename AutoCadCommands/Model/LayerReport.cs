@@ -1,5 +1,5 @@
 
-namespace Structural_Automation.AutoCadCommands.Layers
+namespace Structural_Automation.AutoCadCommands.Model
 {
     /// <summary>
     /// What a layer operation did: the layers it acted on, and the ones it left alone.
