@@ -7,5 +7,3 @@ acyclic.
 |---|---|---|
 | 0 | `SystemParams` | nothing |
 | 1 | `Geometry` | tier 0 |
-
-Geometry has its own tiers — see [Geometry/TIERS.md](Geometry/TIERS.md).
