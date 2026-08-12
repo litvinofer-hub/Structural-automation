@@ -7,7 +7,7 @@ namespace Structural_Automation.BuildingModel
     /// That polygon lies flat, on a plane parallel to the XY plane, and may be any
     /// closed outline. Thickness spreads half above and half below.
     /// </summary>
-    public class Floor
+    public class Floor : IFlattenable
     {
         public Guid Id { get; private set; }
 
@@ -36,9 +36,10 @@ namespace Structural_Automation.BuildingModel
         }
 
         /// <summary>
-        /// Returns the vertices of the mid-polygon, in order around its outline.
+        /// Returns the vertices of the mid-polygon, in order around its outline. That
+        /// polygon is the floor flattened, one dimension short of the slab itself.
         /// </summary>
-        public IEnumerable<Point3d> GetPoints()
+        public IEnumerable<Point3d> GetFlatBuildingPoints()
         {
             return MidPolygon.Vertices;
         }

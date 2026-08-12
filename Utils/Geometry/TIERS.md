@@ -10,3 +10,5 @@ acyclic.
 | 2 | `Vector3d` | tiers 0-1 |
 | 3 | `LineSegment3d` | tiers 0-2 |
 | 4 | `Rectangle`, `Polygon` | tiers 0-3 |
+| 5 | `Box` | tiers 0-4 |
+| 6 | `VerticalBox` | tiers 0-5 |
