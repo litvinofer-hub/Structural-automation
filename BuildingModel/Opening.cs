@@ -40,21 +40,14 @@ namespace Structural_Automation.BuildingModel
             return MidSurface.GetCorners();
         }
 
-        /// <summary>
-        /// Two openings are equal when they fill the same space and are of the same type,
-        /// so a door and a window over one space are different openings. The identifier
-        /// plays no part, so two openings created separately over the same space are equal.
-        /// </summary>
         public override bool Equals(object? obj)
         {
-            return obj is Opening other
-                && base.Equals(obj)
-                && Type == other.Type;
+            return obj is Opening other && Id == other.Id;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Type);
+            return Id.GetHashCode();
         }
     }
 }

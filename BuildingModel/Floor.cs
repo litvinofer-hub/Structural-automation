@@ -44,33 +44,14 @@ namespace Structural_Automation.BuildingModel
             return MidPolygon.Vertices;
         }
 
-        /// <summary>
-        /// Two floors are equal when they occupy the same space: same mid-polygon,
-        /// regardless of where its outline starts or which way round it runs, and
-        /// same thickness.
-        /// </summary>
         public override bool Equals(object? obj)
         {
-            if (obj is Floor other)
-            {
-                return MidPolygon.Equals(other.MidPolygon)
-                    && new LengthTolerance().AreEqual(Thickness, other.Thickness);
-            }
-
-            return false;
+            return obj is Floor other && Id == other.Id;
         }
 
         public override int GetHashCode()
         {
-            double roundFactor = 1.0 / new LengthTolerance().Tolerance;
-
-            unchecked
-            {
-                int hash = 17;
-                hash = hash * 31 + MidPolygon.GetHashCode();
-                hash = hash * 31 + Math.Round(Thickness * roundFactor).GetHashCode();
-                return hash;
-            }
+            return Id.GetHashCode();
         }
     }
 }

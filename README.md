@@ -13,3 +13,13 @@ acyclic.
 
 Each project has its own tiers.
 Each folder has its own namespaces and tiers.
+
+## Equality
+
+A `Utils.Geometry` instance is its geometry, so it compares by geometry: two instances
+are equal when they fill the same space, whichever corner each was built from and
+whichever way round its edges run.
+
+A `BuildingModel` instance is an element of the building, so it compares by `Id`: two
+elements built over the same space are two elements, and one can be taken out without
+the other going with it.

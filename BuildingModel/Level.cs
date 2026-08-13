@@ -5,6 +5,8 @@ namespace Structural_Automation.BuildingModel
 {
     public class Level(double elevation)
     {
+        public Guid Id { get; private set; } = Guid.NewGuid();
+
         /// <summary>
         /// Global Z coordinate of the level.
         /// </summary>
@@ -15,18 +17,12 @@ namespace Structural_Automation.BuildingModel
 
         public override bool Equals(object? obj)
         {
-            if (obj is Level other)
-            {
-                return new LengthTolerance().AreEqual(Elevation, other.Elevation);
-            }
-
-            return false;
+            return obj is Level other && Id == other.Id;
         }
 
         public override int GetHashCode()
         {
-            double roundFactor = 1.0 / new LengthTolerance().Tolerance;
-            return Math.Round(Elevation * roundFactor).GetHashCode();
+            return Id.GetHashCode();
         }
 
         /// <summary>

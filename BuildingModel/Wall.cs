@@ -302,5 +302,15 @@ namespace Structural_Automation.BuildingModel
             return lengthTolerance.IsGreaterThanOrEqual(along, midBorder)
                 || lengthTolerance.IsGreaterThanOrEqual(up, midBorder);
         }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Wall other && Id == other.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }

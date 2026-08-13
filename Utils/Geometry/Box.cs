@@ -65,14 +65,12 @@ namespace Structural_Automation.Utils.Geometry
         }
 
         /// <summary>
-        /// Two boxes are equal when they are the same kind of box and fill the same space,
-        /// regardless of which corner each one was built from or the order of its edge
-        /// vectors. The kinds have to match because boxes are narrowed by subclassing, and
-        /// a wall should not come out equal to a void filling it exactly.
+        /// Two boxes are equal when they fill the same space, regardless of which corner
+        /// each one was built from or the order of its edge vectors.
         /// </summary>
         public override bool Equals(object? obj)
         {
-            if (obj is Box other && other.GetType() == GetType())
+            if (obj is Box other)
             {
                 IReadOnlyList<Point3d> otherCorners = other.GetCorners();
 

@@ -1,9 +1,9 @@
-﻿using Structural_Automation.Utils.Geometry;
-
-namespace Structural_Automation.BuildingModel
+﻿namespace Structural_Automation.BuildingModel
 {
     public class SubLevel(double offset)
     {
+        public Guid Id { get; private set; } = Guid.NewGuid();
+
         /// <summary>
         /// Offset relative to the parent Level's Elevation.
         /// </summary>
@@ -11,18 +11,12 @@ namespace Structural_Automation.BuildingModel
 
         public override bool Equals(object? obj)
         {
-            if (obj is SubLevel other)
-            {
-                return new LengthTolerance().AreEqual(Offset, other.Offset);
-            }
-
-            return false;
+            return obj is SubLevel other && Id == other.Id;
         }
 
         public override int GetHashCode()
         {
-            double roundFactor = 1.0 / new LengthTolerance().Tolerance;
-            return Math.Round(Offset * roundFactor).GetHashCode();
+            return Id.GetHashCode();
         }
     }
 }
