@@ -5,17 +5,12 @@ acyclic.
 
 BuildingModel may use Utils. Utils must never use BuildingModel.
 
-Folders group by role and the namespaces follow them, so a tier is readable from the
-path a file sits at.
+| Tier | Folder or Class | May depend on |
+|---|---|---|
+| 0 | `Params/` | Utils |
+| 1 | `SubLevel`, `IFlattenable` | tier 0, Utils |
+| 2 | `Level`, `Floor`, `Opening` | tiers 0-1, Utils |
+| 3 | `Wall` | tiers 0-2, Utils |
+| 4 | `Building` | tiers 0-3, Utils |
 
-| Tier | Folder | Class | May depend on |
-|---|---|---|---|
-| 0 | `Params/` | `WallBorders` | Utils |
-| 0 | root | `SubLevel`, `IFlattenable` | Utils |
-| 1 | root | `Level`, `Floor`, `Opening` | tier 0, Utils |
-| 2 | root | `Wall` | tiers 0-1, Utils |
-| 3 | root | `Building` | tiers 0-2, Utils |
-
-`Params/` holds the parameters building elements are given, the defaults they start
-with and the units those depend on. Nothing in it knows what an element is, so it sits
-at the bottom alongside the pieces that carry no dependencies of their own.
+Each folder has its own namespaces and tiers.

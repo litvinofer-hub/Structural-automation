@@ -7,3 +7,5 @@ acyclic.
 |---|---|---|
 | 0 | `SystemParams` | nothing |
 | 1 | `Geometry` | tier 0 |
+
+Each folder has its own namespaces and tiers.
